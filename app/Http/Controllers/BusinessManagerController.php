@@ -57,50 +57,52 @@ class BusinessManagerController extends Controller
     }
 
     public function createChildBM(Request $request)
-    {
-        $request->validate([
-            'parentBmId' => 'required',
-            'bmName' => 'required',
-            'shared_page_id' => 'required',
-            'bmVertical' => 'required',
-            'access_token' => 'required',
-            'appsecret_proof' => 'required',
-        ]);
+{
+    Log::info('Received request data:', $request->all());
 
-        $url = 'https://graph.facebook.com/v12.0/' . $request->parentBmId . '/owned_businesses';
-        $fields = [
-            'id' => $request->parentBmId,
-            'name' => $request->bmName,
-            'vertical' => $request->bmVertical,
-            'shared_page_id' => $request->shared_page_id,
-            'page_permitted_tasks' => json_encode(["ADVERTISE", "ANALYZE"]),
-            'timezone_id' => 1,
-            'access_token' => $request->access_token,
-            'appsecret_proof' => $request->appsecret_proof,
-        ];
+    $validated = $request->validate([
+        'parentBmId' => 'required',
+        'bmName' => 'required',
+        'shared_page_id' => 'required',
+        'bmVertical' => 'required',
+        'access_token' => 'required',
+    ]);
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($fields));
+    // 你的逻辑代码
+    $url = 'https://graph.facebook.com/v12.0/' . $request->parentBmId . '/businesses';
+    $headers = [
+        'Authorization: Bearer ' . $request->access_token,
+        'Content-Type: application/json'
+    ];
 
-        $response = curl_exec($ch);
-        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $data = [
+        'name' => $request->bmName,
+        'vertical' => $request->bmVertical,
+        'shared_page_id' => $request->shared_page_id
+    ];
 
-        if (curl_errno($ch)) {
-            $error_message = curl_error($ch);
-            curl_close($ch);
-            return response()->json(['error' => 'CURL Error: ' . $error_message], 500);
-        }
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
+    $response = curl_exec($ch);
+    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+    if (curl_errno($ch)) {
+        $error_message = curl_error($ch);
         curl_close($ch);
-
-        if ($status == 200) {
-            return response()->json(json_decode($response));
-        } else {
-            return response()->json(['error' => 'Failed to create child BM', 'details' => json_decode($response)], $status);
-        }
-        
+        return response()->json(['error' => 'CURL Error: ' . $error_message], 500);
     }
+
+    curl_close($ch);
+
+    if ($status == 200) {
+        return response()->json(json_decode($response));
+    } else {
+        return response()->json(['error' => 'Failed to create child BM', 'details' => json_decode($response)], $status);
+    }
+}
+
 }
