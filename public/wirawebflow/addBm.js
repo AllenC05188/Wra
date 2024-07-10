@@ -37,22 +37,20 @@ function addBm() {
         body: JSON.stringify(jsonObject)
     })
     .then(response => {
-        if (!response.ok) {
-            return response.json().then(data => {
-                throw new Error(data.message || 'Unprocessable Content');
-            });
-        }
-        return response.json();
+        return response.json().then(data => ({status: response.status, body: data}));
     })
     .then(data => {
-        if (data.error) {
-            document.getElementById('response').innerText = '子BM創建失敗: ' + data.error;
+        if (data.status === 422) {
+            console.log('Validation errors:', data.body.errors);
+            document.getElementById('response').innerText = '子BM創建失敗: ' + JSON.stringify(data.body.errors);
+        } else if (data.status === 200) {
+            document.getElementById('response').innerText = '子BM創建成功，ID: ' + data.body.ID;
         } else {
-            document.getElementById('response').innerText = '子BM創建成功，ID: ' + data.ID;
+            document.getElementById('response').innerText = '子BM創建失敗: ' + data.body.message;
         }
     })
     .catch(error => {
-        document.getElementById('response').innerText = '子BM創建失敗: ' + error.message;
+        document.getElementById('response').innerText = '子BM創建失敗，請檢查控制台日誌獲取更多信息。';
         console.error('Error:', error);
     });
 }
