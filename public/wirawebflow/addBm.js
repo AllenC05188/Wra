@@ -22,7 +22,7 @@ function addBm() {
         return response.json().then(data => ({status: response.status, ok: response.ok, body: data}));
     })
     .then(data => {
-        if (data.ok) {
+        if (data.ok && data.body && data.body.ID) {
             document.getElementById('response').innerText = '子BM創建成功，ID: ' + data.body.ID;
         } else {
             let errorMessage = '子BM創建失敗:\n';

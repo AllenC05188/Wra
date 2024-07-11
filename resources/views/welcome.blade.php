@@ -122,46 +122,50 @@
     <div id="1" class="hidden">
         <!-- 子BM管理內容 -->
         <h2>新增子BM</h2>
-       <form id="addBmForm" method="POST" action="{{ route('facebook.createChildBM') }}">
-        @csrf
-        <label for="parentBmId">父BM ID: (請貼上:1091332491850683)</label>
-        <input type="text" id="parentBmId" name="parentBmId" required><br><br>
+        <form id="addBmForm" method="POST" action="{{ route('facebook.createChildBM') }}">
+            @csrf
+            <label for="parentBmId">父BM ID: (請貼上:1091332491850683)</label>
+            <input type="text" id="parentBmId" name="parentBmId" required><br><br>
+        
+            <label for="bmName">子BM名稱:</label>
+            <input type="text" id="bmName" name="bmName" required><br><br>
+        
+            <label for="shared_page_id">Shared Page ID:</label>
+            <input type="text" id="shared_page_id" name="shared_page_id" placeholder="Shared Page ID" required><br><br>
+        
+            <label for="bmVertical">子BM行業別:</label>
+            <select id="bmVertical" name="bmVertical" required>
+                <option value="ADVERTISING">Advertising</option>
+                <option value="AUTOMOTIVE">Automotive</option>
+                <option value="CONSUMER_PACKAGED_GOODS">Consumer Packaged Goods</option>
+                <option value="ECOMMERCE">Ecommerce</option>
+                <option value="EDUCATION">Education</option>
+                <option value="ENERGY_AND_UTILITIES">Energy and Utilities</option>
+                <option value="ENTERTAINMENT_AND_MEDIA">Entertainment and Media</option>
+                <option value="FINANCIAL_SERVICES">Financial Services</option>
+                <option value="GAMING">Gaming</option>
+                <option value="GOVERNMENT_AND_POLITICS">Government and Politics</option>
+                <option value="HEALTHCARE">Healthcare</option>
+                <option value="LUXURY">Luxury</option>
+                <option value="MARKETING">Marketing</option>
+                <option value="NON_PROFIT">Non-profit</option>
+                <option value="ORGANIZATIONS_AND_ASSOCIATIONS">Organizations and Associations</option>
+                <option value="PROFESSIONAL_SERVICES">Professional Services</option>
+                <option value="RETAIL">Retail</option>
+                <option value="TECHNOLOGY">Technology</option>
+                <option value="TELECOMMUNICATIONS">Telecommunications</option>
+                <option value="TRAVEL">Travel</option>
+                <option value="OTHER">Other</option>
+            </select><br><br>
+        
+            <label for="access_token">Access Token:</label>
+            <input type="text" id="access_token" name="access_token" required><br><br>
+        
+            <button type="button" onclick="addBm()">提交</button>
+        </form>
+        <div id="response"></div>
+        <script src="{{ asset('wirawebflow/addBm.js') }}"></script>
 
-        <label for="bmName">子BM名稱:</label>
-        <input type="text" id="bmName" name="bmName" required><br><br>
-
-        <label for="shared_page_id">Shared Page ID:</label>
-        <input type="text" id="shared_page_id" name="shared_page_id" placeholder="Shared Page ID" required><br><br>
-
-        <label for="bmVertical">子BM行業別:</label>
-        <select id="bmVertical" name="bmVertical" required>
-            <option value="ADVERTISING">Advertising</option>
-            <option value="AUTOMOTIVE">Automotive</option>
-            <option value="CONSUMER_PACKAGED_GOODS">Consumer Packaged Goods</option>
-            <option value="ECOMMERCE">Ecommerce</option>
-            <option value="EDUCATION">Education</option>
-            <option value="ENERGY_AND_UTILITIES">Energy and Utilities</option>
-            <option value="ENTERTAINMENT_AND_MEDIA">Entertainment and Media</option>
-            <option value="FINANCIAL_SERVICES">Financial Services</option>
-            <option value="GAMING">Gaming</option>
-            <option value="GOVERNMENT_AND_POLITICS">Government and Politics</option>
-            <option value="HEALTHCARE">Healthcare</option>
-            <option value="LUXURY">Luxury</option>
-            <option value="MARKETING">Marketing</option>
-            <option value="NON_PROFIT">Non-profit</option>
-            <option value="ORGANIZATIONS_AND_ASSOCIATIONS">Organizations and Associations</option>
-            <option value="PROFESSIONAL_SERVICES">Professional Services</option>
-            <option value="RETAIL">Retail</option>
-            <option value="TECHNOLOGY">Technology</option>
-            <option value="TELECOMMUNICATIONS">Telecommunications</option>
-            <option value="TRAVEL">Travel</option>
-            <option value="OTHER">Other</option>
-        </select><br><br>
-
-        <button type="button" onclick="addBm()">提交</button>
-    </form>
-    <div id="response"></div>
-    <script src="{{ asset('wirawebflow/addBm.js') }}"></script>
     </div>
 
     <div id="2" class="hidden">
