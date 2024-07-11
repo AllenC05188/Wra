@@ -19,13 +19,23 @@ function addBm() {
         body: JSON.stringify(jsonObject)
     })
     .then(response => {
-        return response.json().then(data => ({status: response.status, body: data}));
+        return response.json().then(data => ({status: response.status, ok: response.ok, body: data}));
     })
     .then(data => {
-        if (data.status === 200) {
+        if (data.ok) {
             document.getElementById('response').innerText = '子BM創建成功，ID: ' + data.body.ID;
         } else {
-            document.getElementById('response').innerText = '子BM創建失敗: ' + JSON.stringify(data.body);
+            let errorMessage = '子BM創建失敗:\n';
+            for (const [key, value] of Object.entries(data.body.errors || {})) {
+                errorMessage += `${key}: ${value.join(', ')}\n`;
+            }
+            if (data.body.error) {
+                errorMessage += `\nError: ${data.body.error}`;
+                if (data.body.details) {
+                    errorMessage += `\nDetails: ${data.body.details}`;
+                }
+            }
+            document.getElementById('response').innerText = errorMessage;
         }
     })
     .catch(error => {
