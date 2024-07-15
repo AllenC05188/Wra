@@ -24,7 +24,6 @@
     </script>
     <link rel="shortcut icon" type="image/x-icon" href="https://cdn.prod.website-files.com/666defca174b035140fcbf7b/666defcb174b035140fcbfc0_New%20icon.ico"/>
     <link rel="apple-touch-icon" href="https://cdn.prod.website-files.com/666defca174b035140fcbf7b/666defcb174b035140fcbfd6_metric-webclip.png"/>
-</head>
 
 <body>
     <div class="navigation w-nav" role="banner" data-collapse="medium" data-animation="default" data-duration="400" data-easing="ease" data-easing2="ease">
@@ -118,105 +117,61 @@
                 <strong class="bold-text-2">系統設定</strong>
             </div>
         </div>
-        <div class="interface" id="interface">
-    <div id="fb-root"></div>
-    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
-    <script>
-        window.fbAsyncInit = function() {
-            FB.init({
-                appId      : '{{ env('FACEBOOK_APP_ID') }}', // 使用環境變數
-                cookie     : true,
-                xfbml      : true,
-                version    : '{{ env('FACEBOOK_DEFAULT_GRAPH_VERSION') }}' // 使用環境變數
-            });
 
-            FB.AppEvents.logPageView();
-        };
-    </script>
-    <button onclick="facebookLogin()">Facebook 登錄</button>
 
-    <script>
-        function facebookLogin() {
-            FB.login(function(response) {
-                if (response.authResponse) {
-                    console.log('歡迎！正在獲取您的信息.... ');
-                    FB.api('/me', function(response) {
-                        console.log('很高興見到你, ' + response.name);
-                        // 將訪問令牌發送到後端
-                        fetch('/facebook-callback', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({
-                                accessToken: FB.getAuthResponse().accessToken
-                            })
-                        }).then(response => response.json())
-                          .then(data => {
-                              if (data.success) {
-                                  console.log('訪問令牌已成功傳遞');
-                              } else {
-                                  console.log('錯誤:', data.error);
-                              }
-                          }).catch(error => {
-                              console.error('錯誤:', error);
-                          });
-                    });
-                } else {
-                    console.log('用戶取消登錄或未完全授權。');
-                }
-            }, {scope: 'email,public_profile,business_management'});
-        }
-    </script>
+    <div class="interface" id="interface">
+            <div id="fb-root"></div>
+            <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+            <button onclick="facebookLogin()">Facebook 登錄</button>
 
     <div id="1" class="hidden">
         <!-- 子BM管理內容 -->
         <h2>新增子BM</h2>
-        <form id="addBmForm" method="POST" action="{{ route('facebook.createChildBM') }}">
-            @csrf
-            <label for="parentBmId">父BM ID: (請貼上:1091332491850683)</label>
-            <input type="text" id="parentBmId" name="parentBmId" required><br><br>
-        
-            <label for="bmName">子BM名稱:</label>
-            <input type="text" id="bmName" name="bmName" required><br><br>
-        
-            <label for="shared_page_id">Shared Page ID:</label>
-            <input type="text" id="shared_page_id" name="shared_page_id" placeholder="Shared Page ID" required><br><br>
-        
-            <label for="bmVertical">子BM行業別:</label>
-            <select id="bmVertical" name="bmVertical" required>
-                <option value="ADVERTISING">Advertising</option>
-                <option value="AUTOMOTIVE">Automotive</option>
-                <option value="CONSUMER_PACKAGED_GOODS">Consumer Packaged Goods</option>
-                <option value="ECOMMERCE">Ecommerce</option>
-                <option value="EDUCATION">Education</option>
-                <option value="ENERGY_AND_UTILITIES">Energy and Utilities</option>
-                <option value="ENTERTAINMENT_AND_MEDIA">Entertainment and Media</option>
-                <option value="FINANCIAL_SERVICES">Financial Services</option>
-                <option value="GAMING">Gaming</option>
-                <option value="GOVERNMENT_AND_POLITICS">Government and Politics</option>
-                <option value="HEALTHCARE">Healthcare</option>
-                <option value="LUXURY">Luxury</option>
-                <option value="MARKETING">Marketing</option>
-                <option value="NON_PROFIT">Non-profit</option>
-                <option value="ORGANIZATIONS_AND_ASSOCIATIONS">Organizations and Associations</option>
-                <option value="PROFESSIONAL_SERVICES">Professional Services</option>
-                <option value="RETAIL">Retail</option>
-                <option value="TECHNOLOGY">Technology</option>
-                <option value="TELECOMMUNICATIONS">Telecommunications</option>
-                <option value="TRAVEL">Travel</option>
-                <option value="OTHER">Other</option>
-            </select><br><br>
-        
-            <label for="access_token">Access Token:</label>
-            <input type="text" id="access_token" name="access_token" required><br><br>
-        
-            <button type="button" onclick="addBm()">提交</button>
-        </form>
-        <div id="response"></div>
-        <script src="{{ asset('wirawebflow/addBm.js') }}"></script>
+                <form id="addBmForm" method="POST" action="{{ route('facebook.createChildBM') }}">
+                    @csrf
+                    <label for="parentBmId">父BM ID: (請貼上:1091332491850683)</label>
+                    <input type="text" id="parentBmId" name="parentBmId" required><br><br>
+                
+                    <label for="bmName">子BM名稱:</label>
+                    <input type="text" id="bmName" name="bmName" required><br><br>
+                
+                    <label for="shared_page_id">Shared Page ID:</label>
+                    <input type="text" id="shared_page_id" name="shared_page_id" placeholder="Shared Page ID" required><br><br>
+                
+                    <label for="bmVertical">子BM行業別:</label>
+                    <select id="bmVertical" name="bmVertical" required>
+                        <option value="ADVERTISING">Advertising</option>
+                        <option value="AUTOMOTIVE">Automotive</option>
+                        <option value="CONSUMER_PACKAGED_GOODS">Consumer Packaged Goods</option>
+                        <option value="ECOMMERCE">Ecommerce</option>
+                        <option value="EDUCATION">Education</option>
+                        <option value="ENERGY_AND_UTILITIES">Energy and Utilities</option>
+                        <option value="ENTERTAINMENT_AND_MEDIA">Entertainment and Media</option>
+                        <option value="FINANCIAL_SERVICES">Financial Services</option>
+                        <option value="GAMING">Gaming</option>
+                        <option value="GOVERNMENT_AND_POLITICS">Government and Politics</option>
+                        <option value="HEALTHCARE">Healthcare</option>
+                        <option value="LUXURY">Luxury</option>
+                        <option value="MARKETING">Marketing</option>
+                        <option value="NON_PROFIT">Non-profit</option>
+                        <option value="ORGANIZATIONS_AND_ASSOCIATIONS">Organizations and Associations</option>
+                        <option value="PROFESSIONAL_SERVICES">Professional Services</option>
+                        <option value="RETAIL">Retail</option>
+                        <option value="TECHNOLOGY">Technology</option>
+                        <option value="TELECOMMUNICATIONS">Telecommunications</option>
+                        <option value="TRAVEL">Travel</option>
+                        <option value="OTHER">Other</option>
+                    </select><br><br>
+                
+                    <input type="hidden" id="timezone_id" name="timezone_id" value="8"> <!-- 設置時區為 GMT+8 -->
 
+                    
+                    <input type="hidden" id="access_token" name="access_token" required>
+
+                    <button type="button" onclick="facebookLogin()">提交</button>
+                </form>
+
+                
     </div>
 
     <div id="2" class="hidden">

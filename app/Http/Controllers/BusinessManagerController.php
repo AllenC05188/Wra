@@ -62,7 +62,7 @@ class BusinessManagerController extends Controller
             (object)[ 'id' => 30, 'name' => 'BM 30', 'credit_limit' => 30000 ],
         ];
 
-        $perPage = 10; // 每页显示的项目数
+        $perPage = 20; // 每页显示的项目数
         $page = LengthAwarePaginator::resolveCurrentPage();
         $pagination = new LengthAwarePaginator(
             array_slice($businessManagers, ($page - 1) * $perPage, $perPage),
@@ -76,51 +76,30 @@ class BusinessManagerController extends Controller
     }
 
    public function createChildBM(Request $request)
-{
-    $accessToken = $request->input('accessToken'); // 從請求中獲取訪問令牌
+    {
+        $accessToken = $request->input('access_token');
+        $appsecretProof = $request->input('appsecret_proof');
+        $parentBmId = $request->input('parentBmId');
+        $bmName = $request->input('bmName');
+        $sharedPageId = $request->input('shared_page_id');
+        $bmVertical = $request->input('bmVertical');
+        $timezoneId = $request->input('timezone_id');
 
-    $validated = $request->validate([
-        'parentBmId' => 'required',
-        'bmName' => 'required',
-        'shared_page_id' => 'required',
-        'bmVertical' => 'required',
-    ]);
+        // 使用Facebook Graph API創建子BM
+        $response = Http::withToken($accessToken)->post("https://graph.facebook.com/v12.0/{$parentBmId}/owned_businesses", [
+            'name' => $bmName,
+            'vertical' => $bmVertical,
+            'shared_page_id' => $sharedPageId,
+            'page_permitted_tasks' => json_encode(["ADVERTISE", "ANALYZE"]),
+            'timezone_id' => $timezoneId,
+        ]);
 
-    $url = 'https://graph.facebook.com/' . env('FACEBOOK_API_VERSION') . '/' . $request->parentBmId . '/businesses';
-    $headers = [
-        'Authorization: Bearer ' . $accessToken,
-        'Content-Type: application/json'
-    ];
-
-    $data = [
-        'name' => $request->bmName,
-        'vertical' => $request->bmVertical,
-        'shared_page_id' => $request->shared_page_id
-    ];
-
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-
-    $response = curl_exec($ch);
-    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-    if (curl_errno($ch)) {
-        $error_message = curl_error($ch);
-        curl_close($ch);
-        return response()->json(['error' => 'CURL Error: ' . $error_message], 500);
+        if ($response->successful()) {
+            return back()->with('success', '子BM已成功創建');
+        } else {
+            return back()->with('error', '創建子BM失敗: ' . $response->body());
+        }
     }
-
-    curl_close($ch);
-
-    if ($status == 200) {
-        return response()->json(json_decode($response));
-    } else {
-        return response()->json(['error' => 'Failed to create child BM', 'details' => json_decode($response)], $status);
-    }
-}
 
 
 

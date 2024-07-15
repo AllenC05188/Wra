@@ -1,45 +1,40 @@
-function addBm() {
-    const form = document.getElementById('addBmForm');
-    const formData = new FormData(form);
-    const jsonObject = {};
-
-    formData.forEach((value, key) => {
-        jsonObject[key] = value;
+window.fbAsyncInit = function() {
+    FB.init({
+        appId      : '{{ env('FACEBOOK_APP_ID') }}', // 使用環境變數
+        cookie     : true,
+        xfbml      : true,
+        version    : '{{ env('FACEBOOK_DEFAULT_GRAPH_VERSION') }}' // 使用環境變數
     });
 
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    FB.AppEvents.logPageView();
+};
 
-    fetch(form.action, {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': csrfToken,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(jsonObject)
-    })
-    .then(response => {
-        return response.json().then(data => ({status: response.status, ok: response.ok, body: data}));
-    })
-    .then(data => {
-        if (data.ok && data.body && data.body.ID) {
-            document.getElementById('response').innerText = '子BM創建成功，ID: ' + data.body.ID;
+function facebookLogin() {
+    FB.login(function(response) {
+        if (response.authResponse) {
+            console.log('歡迎！正在獲取您的信息.... ');
+            FB.api('/me', function(response) {
+                console.log('很高興見到你, ' + response.name);
+                // 將訪問令牌附加到表單並提交
+                document.getElementById('access_token').value = FB.getAuthResponse().accessToken;
+                // 可以生成appsecret_proof，如果需要的話
+                const appSecret = '{{ env('FACEBOOK_APP_SECRET') }}';
+                const accessToken = FB.getAuthResponse().accessToken;
+                const appsecret_proof = CryptoJS.HmacSHA256(accessToken, appSecret).toString();
+                document.getElementById('appsecret_proof').value = appsecret_proof;
+
+                document.getElementById('addBmForm').submit();
+            });
         } else {
-            let errorMessage = '子BM創建失敗:\n';
-            for (const [key, value] of Object.entries(data.body.errors || {})) {
-                errorMessage += `${key}: ${value.join(', ')}\n`;
-            }
-            if (data.body.error) {
-                errorMessage += `\nError: ${data.body.error}`;
-                if (data.body.details) {
-                    errorMessage += `\nDetails: ${data.body.details}`;
-                }
-            }
-            document.getElementById('response').innerText = errorMessage;
+            console.log('用戶取消登錄或未完全授權。');
         }
-    })
-    .catch(error => {
-        document.getElementById('response').innerText = '子BM創建失敗，請檢查控制台日誌獲取更多信息。';
-        console.error('錯誤:', error);
-    });
+    }, {scope: 'email,public_profile,business_management'});
 }
+
+(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
