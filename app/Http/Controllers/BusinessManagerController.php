@@ -6,6 +6,25 @@ use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Pagination\LengthAwarePaginator;
 
+
+
+class FacebookController extends Controller
+{
+    public function handleCallback(Request $request)
+    {
+        $accessToken = $request->input('accessToken');
+
+        if ($accessToken) {
+            // 在這裡處理訪問令牌（例如，將其保存到數據庫）
+            Log::info('訪問令牌：' . $accessToken);
+
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false, 'error' => '未提供訪問令牌'], 400);
+        }
+    }
+}
+
 class BusinessManagerController extends Controller
 {
     public function index()
@@ -56,22 +75,20 @@ class BusinessManagerController extends Controller
         return view('welcome', ['businessManagers' => $pagination]);
     }
 
-    public function createChildBM(Request $request)
+   public function createChildBM(Request $request)
 {
-    Log::info('Received request data:', $request->all());
+    $accessToken = $request->input('accessToken'); // 從請求中獲取訪問令牌
 
     $validated = $request->validate([
         'parentBmId' => 'required',
         'bmName' => 'required',
         'shared_page_id' => 'required',
         'bmVertical' => 'required',
-        'access_token' => 'required',
     ]);
 
-    // 你的逻辑代码
-    $url = 'https://graph.facebook.com/v12.0/' . $request->parentBmId . '/businesses';
+    $url = 'https://graph.facebook.com/' . env('FACEBOOK_API_VERSION') . '/' . $request->parentBmId . '/businesses';
     $headers = [
-        'Authorization: Bearer ' . $request->access_token,
+        'Authorization: Bearer ' . $accessToken,
         'Content-Type: application/json'
     ];
 
@@ -104,5 +121,7 @@ class BusinessManagerController extends Controller
         return response()->json(['error' => 'Failed to create child BM', 'details' => json_decode($response)], $status);
     }
 }
+
+
 
 }

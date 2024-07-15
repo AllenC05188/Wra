@@ -119,6 +119,57 @@
             </div>
         </div>
         <div class="interface" id="interface">
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId      : '{{ env('FACEBOOK_APP_ID') }}', // 使用環境變數
+                cookie     : true,
+                xfbml      : true,
+                version    : '{{ env('FACEBOOK_DEFAULT_GRAPH_VERSION') }}' // 使用環境變數
+            });
+
+            FB.AppEvents.logPageView();
+        };
+    </script>
+    <button onclick="facebookLogin()">Facebook 登錄</button>
+
+    <script>
+        function facebookLogin() {
+            FB.login(function(response) {
+                if (response.authResponse) {
+                    console.log('歡迎！正在獲取您的信息.... ');
+                    FB.api('/me', function(response) {
+                        console.log('很高興見到你, ' + response.name);
+                        // 將訪問令牌發送到後端
+                        fetch('/facebook-callback', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                accessToken: FB.getAuthResponse().accessToken
+                            })
+                        }).then(response => response.json())
+                          .then(data => {
+                              if (data.success) {
+                                  console.log('訪問令牌已成功傳遞');
+                              } else {
+                                  console.log('錯誤:', data.error);
+                              }
+                          }).catch(error => {
+                              console.error('錯誤:', error);
+                          });
+                    });
+                } else {
+                    console.log('用戶取消登錄或未完全授權。');
+                }
+            }, {scope: 'email,public_profile,business_management'});
+        }
+    </script>
+
     <div id="1" class="hidden">
         <!-- 子BM管理內容 -->
         <h2>新增子BM</h2>

@@ -8,5 +8,6 @@ Route::get('/', [BusinessManagerController::class, 'index']);
 Route::post('/create-child-bm', [BusinessManagerController::class, 'createChildBM'])->name('facebook.createChildBM');
 Route::post('/update-bm/{id}', [BusinessManagerController::class, 'updateBm'])->name('updateBm');
 Route::delete('/delete-bm/{id}', [BusinessManagerController::class, 'deleteBm'])->name('deleteBm');
+Route::post('/facebook-callback', [App\Http\Controllers\FacebookController::class, 'handleCallback']);
 
 
