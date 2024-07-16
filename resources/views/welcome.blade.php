@@ -137,7 +137,8 @@
             <input type="text" id="bmName" name="bmName" required><br><br>
         
             <label for="shared_page_id">Shared Page ID:</label>
-            <input type="text" id="shared_page_id" name="shared_page_id" placeholder="Shared Page ID" required><br><br>
+            <input type="hidden" id="shared_page_id" name="shared_page_id" required><br><br>
+            <div id="selectedPage">尚未選擇頁面</div>
         
             <label for="bmVertical">子BM行業別:</label>
             <select id="bmVertical" name="bmVertical" required>
@@ -163,9 +164,11 @@
                 <option value="TRAVEL">Travel</option>
                 <option value="OTHER">Other</option>
             </select><br><br>
-        
+            
+            <input type="hidden" id="timezone_id" name="timezone_id" value="8">
+
             <input type="hidden" id="access_token" name="access_token" required>
-        
+            
             <button type="button" onclick="addBm()">提交</button>
         </form>
         <div id="response"></div>

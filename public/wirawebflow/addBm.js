@@ -23,11 +23,33 @@ document.addEventListener("DOMContentLoaded", function() {
             if (response.authResponse) {
                 const accessToken = FB.getAuthResponse().accessToken;
                 document.getElementById('access_token').value = accessToken;
-                alert('Access Token 已獲取並填入表單');
+                document.getElementById('timezone_id').value = '8';  // 自动填入时区ID
+                alert('Access Token 和 Timezone ID 已獲取並填入表單');
+                getManagedPages(accessToken); // 获取用户管理的页面
             } else {
                 console.log('用戶取消登錄或未完全授權。');
             }
-        }, {scope: 'email,public_profile,business_management'});
+        }, {scope: 'email,public_profile,business_management,pages_show_list'});
+    }
+
+    function getManagedPages(accessToken) {
+        FB.api('/me/accounts', function(response) {
+            if (response && !response.error) {
+                const pageList = document.getElementById('pageList');
+                pageList.innerHTML = ''; // 清空之前的内容
+                response.data.forEach(page => {
+                    const button = document.createElement('button');
+                    button.innerText = `${page.name} (${page.id})`;
+                    button.onclick = function() {
+                        document.getElementById('shared_page_id').value = page.id;
+                        document.getElementById('selectedPage').innerText = `已選擇頁面: ${page.name} (${page.id})`;
+                    };
+                    pageList.appendChild(button);
+                });
+            } else {
+                console.error('Error fetching managed pages:', response.error);
+            }
+        });
     }
 
     function addBm() {
