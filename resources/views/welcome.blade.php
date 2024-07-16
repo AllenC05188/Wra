@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta charset="utf-8"/>
@@ -42,7 +41,6 @@
                 <a href="/" class="nav-link w-nav-link">Customers</a>
                 <a href="/" class="nav-link w-nav-link">操作紀錄</a>
             </nav>
-            
         </div>
     </div>
     <div class="slider w-slider" data-animation="slide" data-delay="4000" data-autoplay="false" data-autoplay-limit="0" data-disable-swipe="false" data-duration="500" data-easing="ease" data-hide-arrows="false" data-infinite="true" data-nav-spacing="3">
@@ -103,7 +101,6 @@
     <section></section>
     <section class="section-5"></section>
 
-    
     <section class="section-4">
         <div class="div-block-6">
             <div class="div-block-3" data-w-id="90af207a-a776-7d65-b9ca-61de9ae824ff">
@@ -123,127 +120,122 @@
             </div>
         </div>
         <div class="interface" id="interface">
-    
-
-    <div id="1" class="hidden">
-        <button type="button" onclick="getAccessToken()">登入FB以獲取 Access Token</button>
-        <div id="pageList"></div>
-
-        <!-- 子BM管理內容 -->
-        <h2>新增子BM</h2>
-        <form id="addBmForm" method="POST" action="{{ route('facebook.createChildBM') }}">
-            @csrf
-            <label for="parentBmId">父BM ID: (請貼上:1091332491850683)</label>
-            <input type="text" id="parentBmId" name="parentBmId" required><br><br>
-        
-            <label for="bmName">子BM名稱:</label>
-            <input type="text" id="bmName" name="bmName" required><br><br>
-        
-            <label for="shared_page_id">Shared Page ID:</label>
-            <input type="hidden" id="shared_page_id" name="shared_page_id" required><br><br>
-            <div id="selectedPage">尚未選擇頁面</div>
-        
-            <label for="bmVertical">子BM行業別:</label>
-            <select id="bmVertical" name="bmVertical" required>
-                <option value="ADVERTISING">Advertising</option>
-                <option value="AUTOMOTIVE">Automotive</option>
-                <option value="CONSUMER_PACKAGED_GOODS">Consumer Packaged Goods</option>
-                <option value="ECOMMERCE">Ecommerce</option>
-                <option value="EDUCATION">Education</option>
-                <option value="ENERGY_AND_UTILITIES">Energy and Utilities</option>
-                <option value="ENTERTAINMENT_AND_MEDIA">Entertainment and Media</option>
-                <option value="FINANCIAL_SERVICES">Financial Services</option>
-                <option value="GAMING">Gaming</option>
-                <option value="GOVERNMENT_AND_POLITICS">Government and Politics</option>
-                <option value="HEALTHCARE">Healthcare</option>
-                <option value="LUXURY">Luxury</option>
-                <option value="MARKETING">Marketing</option>
-                <option value="NON_PROFIT">Non-profit</option>
-                <option value="ORGANIZATIONS_AND_ASSOCIATIONS">Organizations and Associations</option>
-                <option value="PROFESSIONAL_SERVICES">Professional Services</option>
-                <option value="RETAIL">Retail</option>
-                <option value="TECHNOLOGY">Technology</option>
-                <option value="TELECOMMUNICATIONS">Telecommunications</option>
-                <option value="TRAVEL">Travel</option>
-                <option value="OTHER">Other</option>
-            </select><br><br>
+            <div id="fb-root"></div>
+            <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+            <button type="button" onclick="getAccessToken()">登入FB以獲取 Access Token</button>
             
-            <input type="hidden" id="timezone_id" name="timezone_id" value="8">
+            <div id="1" class="hidden">
+                <!-- 子BM管理內容 -->
+                <h2>新增子BM</h2>
+                <form id="addBmForm" method="POST" action="{{ route('facebook.createChildBM') }}">
+                    @csrf
+                    <label for="parentBmId">父BM ID: (請貼上:1091332491850683)</label>
+                    <input type="text" id="parentBmId" name="parentBmId" required><br><br>
 
-            <input type="hidden" id="access_token" name="access_token" required>
-            
-            <button type="button" onclick="addBm()">提交</button>
-        </form>
-        <div id="response"></div>
-        <script src="{{ asset('wirawebflow/addBm.js') }}"></script>
+                    <label for="bmName">子BM名稱:</label>
+                    <input type="text" id="bmName" name="bmName" required><br><br>
 
-    </div>
+                    <label for="shared_page_id">Shared Page ID:</label>
+                    <input type="hidden" id="shared_page_id" name="shared_page_id" required><br><br>
+                    <div id="pageList"></div>
+                    <div id="selectedPage">尚未選擇頁面</div>
 
-    <div id="2" class="hidden">
-        <!-- 用戶管理內容 -->
-        <h2>管理子BM</h2>
-            <div style="background-color: #f8f9fa; color: #343a40; padding: 10px; border-radius: 5px; border: 1px solid #ced4da; margin-left: 20%;">
-                設置好新額度之後請按下"左下方"按鈕確認，請勿按到刪除
+                    <label for="bmVertical">子BM行業別:</label>
+                    <select id="bmVertical" name="bmVertical" required>
+                        <option value="ADVERTISING">Advertising</option>
+                        <option value="AUTOMOTIVE">Automotive</option>
+                        <option value="CONSUMER_PACKAGED_GOODS">Consumer Packaged Goods</option>
+                        <option value="ECOMMERCE">Ecommerce</option>
+                        <option value="EDUCATION">Education</option>
+                        <option value="ENERGY_AND_UTILITIES">Energy and Utilities</option>
+                        <option value="ENTERTAINMENT_AND_MEDIA">Entertainment and Media</option>
+                        <option value="FINANCIAL_SERVICES">Financial Services</option>
+                        <option value="GAMING">Gaming</option>
+                        <option value="GOVERNMENT_AND_POLITICS">Government and Politics</option>
+                        <option value="HEALTHCARE">Healthcare</option>
+                        <option value="LUXURY">Luxury</option>
+                        <option value="MARKETING">Marketing</option>
+                        <option value="NON_PROFIT">Non-profit</option>
+                        <option value="ORGANIZATIONS_AND_ASSOCIATIONS">Organizations and Associations</option>
+                        <option value="PROFESSIONAL_SERVICES">Professional Services</option>
+                        <option value="RETAIL">Retail</option>
+                        <option value="TECHNOLOGY">Technology</option>
+                        <option value="TELECOMMUNICATIONS">Telecommunications</option>
+                        <option value="TRAVEL">Travel</option>
+                        <option value="OTHER">Other</option>
+                    </select><br><br>
+
+                    <input type="hidden" id="timezone_id" name="timezone_id" value="8">
+                    <input type="hidden" id="access_token" name="access_token" required>
+
+                    <button type="button" onclick="addBm()">提交</button>
+                </form>
+                <div id="response"></div>
+                <script src="{{ asset('wirawebflow/addBm.js') }}"></script>
             </div>
 
+            <div id="2" class="hidden">
+                <!-- 用戶管理內容 -->
+                <h2>管理子BM</h2>
+                <div style="background-color: #f8f9fa; color: #343a40; padding: 10px; border-radius: 5px; border: 1px solid #ced4da; margin-left: 20%;">
+                    設置好新額度之後請按下"左下方"按鈕確認，請勿按到刪除
+                </div>
 
-        <div id="bmList">
-            <table id="bmTable">
-                <thead>
-                    
-                    <tr>
-                        <th>子BM ID</th>
-                        <th>子BM 名稱</th>
-                        <th>子BM 額度</th>
-                        <th>修改額度</th>
-                        <th>動作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($businessManagers as $bm)
-                        <tr>
-                            @csrf
-                            <td>{{ $bm->id }}</td>
-                            <td>{{ $bm->name }}</td>
-                            <td>{{ $bm->credit_limit }}</td>
-                            <td>
-                                <input type="number" name="credit_allocation_{{ $bm->id }}" placeholder="分配信用額度">
-                            </td>
-                            <td>
-                                <button type="button" onclick="updateCredit({{ $bm->id }})">確認修改</button>
-                                <button type="button" onclick="deleteBm({{ $bm->id }})">刪除子BM</button>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            <div class="pagination">
-                {{ $businessManagers->links() }}
+                <div id="bmList">
+                    <table id="bmTable">
+                        <thead>
+                            <tr>
+                                <th>子BM ID</th>
+                                <th>子BM 名稱</th>
+                                <th>子BM 額度</th>
+                                <th>修改額度</th>
+                                <th>動作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($businessManagers as $bm)
+                                <tr>
+                                    @csrf
+                                    <td>{{ $bm->id }}</td>
+                                    <td>{{ $bm->name }}</td>
+                                    <td>{{ $bm->credit_limit }}</td>
+                                    <td>
+                                        <input type="number" name="credit_allocation_{{ $bm->id }}" placeholder="分配信用額度">
+                                    </td>
+                                    <td>
+                                        <button type="button" onclick="updateCredit({{ $bm->id }})">確認修改</button>
+                                        <button type="button" onclick="deleteBm({{ $bm->id }})">刪除子BM</button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    <div class="pagination">
+                        {{ $businessManagers->links() }}
+                    </div>
+                    <button onclick="updateCredits()">確認提交修改</button>
+                </div>
+                <script src="{{ asset('wirawebflow/manageBm.js') }}"></script>
             </div>
-            <button onclick="updateCredits()">確認提交修改</button>
+
+            <div id="3" class="hidden">
+                <!-- 角色與權限管理內容 -->
+                <h2>角色與權限管理內容</h2>
+                <p>這裡是角色與權限管理的具體內容。</p>
+            </div>
+
+            <div id="4" class="hidden">
+                <!-- 報表與分析內容 -->
+                <h2>報表與分析內容</h2>
+                <p>這裡是報表與分析的具體內容。</p>
+            </div>
+
+            <div id="5" class="hidden">
+                <!-- 系統設定內容 -->
+                <h2>系統設定內容</h2>
+                <p>這裡是系統設定的具體內容。</p>
+            </div>
         </div>
-        <script src="{{ asset('wirawebflow/manageBm.js') }}"></script>
-    </div>
-
-    <div id="3" class="hidden">
-        <!-- 角色與權限管理內容 -->
-        <h2>角色與權限管理內容</h2>
-        <p>這裡是角色與權限管理的具體內容。</p>
-    </div>
-
-    <div id="4" class="hidden">
-        <!-- 報表與分析內容 -->
-        <h2>報表與分析內容</h2>
-        <p>這裡是報表與分析的具體內容。</p>
-    </div>
-
-    <div id="5" class="hidden">
-        <!-- 系統設定內容 -->
-        <h2>系統設定內容</h2>
-        <p>這裡是系統設定的具體內容。</p>
-    </div>
-</div>
-
     </section>
     <div class="section footer">
         <div class="w-container">
@@ -279,22 +271,12 @@
                 </div>
                 <div class="w-col w-col-2">
                     <h4 class="footer-title">Company</h4>
-                    <!--//<a href="/" class="page-link in-footer">Home</a>
-                    <a //href="/" class="page-link in-footer">Features</a>
-                    <a //href="/" class="page-link in-footer">Clients</a>
-                    <a //href="/" class="page-link in-footer">Pricing</a>
-                    <a //href="/" class="page-link in-footer">Sign Up</a>-->
                 </div>
                 <div class="w-col w-col-2">
                     <h4 class="footer-title">Product</h4>
-                    <!--//<a href="/" class="page-link in-footer">Analytics</a>
-                    <a //href="/" class="page-link in-footer">Businesses</a>
-                    <a //href="/" class="page-link in-footer">Testimonials</a>
-                    <a //href="/" class="page-link in-footer">Integrations</a>-->
                 </div>
                 <div class="w-col w-col-2">
                     <h4 class="footer-title">Legal</h4>
-                    
                 </div>
             </div>
         </div>
@@ -305,6 +287,7 @@
         </div>
     </div>
     <script src="{{ asset('wirawebflow/script.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('wirawebflow/addBm.js') }}" type="text/javascript"></script>
     <script type="text/javascript">
         // Existing JavaScript code here
     </script>
