@@ -4,6 +4,10 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="facebook-app-id" content="{{ env('FACEBOOK_APP_ID') }}">
+    <meta name="facebook-default-graph-version" content="{{ env('FACEBOOK_DEFAULT_GRAPH_VERSION') }}">
+    <meta name="facebook-app-secret" content="{{ env('FACEBOOK_APP_SECRET') }}">
+
     <title>薇拉WIRA</title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="generator" content="Webflow"/>
@@ -119,6 +123,8 @@
             </div>
         </div>
         <div class="interface" id="interface">
+    <button type="button" onclick="getAccessToken()">登入FB以獲取 Access Token</button>
+
     <div id="1" class="hidden">
         <!-- 子BM管理內容 -->
         <h2>新增子BM</h2>
@@ -158,8 +164,7 @@
                 <option value="OTHER">Other</option>
             </select><br><br>
         
-            <label for="access_token">Access Token:</label>
-            <input type="text" id="access_token" name="access_token" required><br><br>
+            <input type="hidden" id="access_token" name="access_token" required>
         
             <button type="button" onclick="addBm()">提交</button>
         </form>
