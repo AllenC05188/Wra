@@ -123,9 +123,12 @@
             </div>
         </div>
         <div class="interface" id="interface">
-    <button type="button" onclick="getAccessToken()">登入FB以獲取 Access Token</button>
+    
 
     <div id="1" class="hidden">
+        <button type="button" onclick="getAccessToken()">登入FB以獲取 Access Token</button>
+        <div id="pageList"></div>
+
         <!-- 子BM管理內容 -->
         <h2>新增子BM</h2>
         <form id="addBmForm" method="POST" action="{{ route('facebook.createChildBM') }}">
