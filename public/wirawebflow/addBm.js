@@ -19,17 +19,19 @@ document.addEventListener("DOMContentLoaded", function() {
     }(document, 'script', 'facebook-jssdk'));
 
     function getAccessToken() {
-        FB.login(function(response) {
-            if (response.authResponse) {
-                const accessToken = FB.getAuthResponse().accessToken;
-                document.getElementById('access_token').value = accessToken;
-                document.getElementById('timezone_id').value = '8';  // 自动填入时区ID
-                alert('Access Token 和 Timezone ID 已獲取並填入表單');
-                getManagedPages(accessToken); // 获取用户管理的页面
-            } else {
-                console.log('用戶取消登錄或未完全授權。');
-            }
-        }, {scope: 'email,public_profile,business_management,ads_management,pages_show_list'});
+    
+    FB.login(function(response) {
+        if (response.authResponse) {
+            const accessToken = FB.getAuthResponse().accessToken;
+            document.getElementById('access_token').value = accessToken;
+            document.getElementById('timezone_id').value = '8';  // 自动填入时区ID
+            alert('Access Token 和 Timezone ID 已獲取並填入表單');
+            getManagedPages(accessToken); // 获取用户管理的页面
+        } else {
+            console.log('用戶取消登錄或未完全授權。');
+        }
+    }, {scope: 'email,public_profile,business_management,ads_management,pages_show_list', auth_type: 'rerequest'});
+
     }
 
     function getManagedPages(accessToken) {
