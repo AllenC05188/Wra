@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function() {
             } else {
                 console.log('用戶取消登錄或未完全授權。');
             }
-        }, {scope: 'email,public_profile,business_management,ads_management,pages_show_list,instagram_basic'});
+        }, {scope: 'email,public_profile,business_management,ads_management,pages_show_list'});
     }
 
     function getManagedPages(accessToken) {
