@@ -136,9 +136,7 @@
                     <input type="text" id="bmName" name="bmName" required><br><br>
 
                     <label for="shared_page_id">Shared Page ID:</label>
-                    <input type="hidden" id="shared_page_id" name="shared_page_id" required><br><br>
-                    <div id="pageList"></div>
-                    <div id="selectedPage">尚未選擇頁面</div>
+                    <input type="text" id="shared_page_id" name="shared_page_id" required><br><br>
 
                     <label for="bmVertical">子BM行業別:</label>
                     <select id="bmVertical" name="bmVertical" required>
