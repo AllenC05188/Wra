@@ -34,11 +34,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
     }
 
-    function getManagedPages(accessToken) {
+   function getManagedPages(accessToken) {
         FB.api('/me/accounts', function(response) {
             if (response && !response.error) {
                 const pageList = document.getElementById('pageList');
-                pageList.innerHTML = ''; // 清空之前的内容
+                while (pageList.firstChild) {
+                    pageList.removeChild(pageList.firstChild);
+                }
                 response.data.forEach(page => {
                     const button = document.createElement('button');
                     button.innerText = `${page.name} (${page.id})`;
@@ -52,6 +54,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.error('Error fetching managed pages:', response.error);
             }
         });
+    
     }
 
     function addBm() {
