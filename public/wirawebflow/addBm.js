@@ -32,29 +32,26 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }, {scope: 'email,public_profile,business_management,ads_management,pages_show_list', auth_type: 'rerequest'});
 
-    }
-
-   function getManagedPages(accessToken) {
-        FB.api('/me/accounts', function(response) {
-            if (response && !response.error) {
-                const pageList = document.getElementById('pageList');
-                while (pageList.firstChild) {
-                    pageList.removeChild(pageList.firstChild);
-                }
-                response.data.forEach(page => {
-                    const button = document.createElement('button');
-                    button.innerText = `${page.name} (${page.id})`;
-                    button.onclick = function() {
-                        document.getElementById('shared_page_id').value = page.id;
-                        document.getElementById('selectedPage').innerText = `已選擇頁面: ${page.name} (${page.id})`;
-                    };
-                    pageList.appendChild(button);
+    function getManagedPages(accessToken) {
+                FB.api('/me/accounts', function(response) {
+                    if (response && !response.error) {
+                        const pageList = document.getElementById('pageList');
+                        pageList.innerHTML = ''; // 清空之前的内容
+                        response.data.forEach(page => {
+                            const button = document.createElement('button');
+                            button.innerText = `${page.name} (${page.id})`;
+                            button.onclick = function() {
+                                document.getElementById('shared_page_id').value = page.id;
+                                document.getElementById('selectedPage').innerText = `已選擇頁面: ${page.name} (${page.id})`;
+                            };
+                            pageList.appendChild(button);
+                        });
+                    } else {
+                        console.error('Error fetching managed pages:', response.error);
+                    }
                 });
-            } else {
-                console.error('Error fetching managed pages:', response.error);
             }
-        });
-    
+
     }
 
     function addBm() {
