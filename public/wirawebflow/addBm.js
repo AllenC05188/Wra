@@ -58,13 +58,13 @@ document.addEventListener("DOMContentLoaded", function() {
         const form = document.getElementById('addBmForm');
         const formData = new FormData(form);
         const jsonObject = {};
-    
+
         formData.forEach((value, key) => {
             jsonObject[key] = value;
         });
-    
+
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    
+
         fetch(form.action, {
             method: 'POST',
             headers: {
@@ -95,7 +95,12 @@ document.addEventListener("DOMContentLoaded", function() {
             document.getElementById('response').innerText = '子BM創建失敗，請檢查控制台日誌獲取更多信息。';
             console.error('錯誤:', error);
         });
+
+        const curlCommand = `curl -X POST -H "X-CSRF-TOKEN: ${csrfToken}" -H "Accept: application/json" -H "Content-Type: application/json" -d '${JSON.stringify(jsonObject)}' ${form.action}`;
+
+        console.log(curlCommand);
     }
+
 
 
     window.getAccessToken = getAccessToken;  // 将 getAccessToken 函数暴露到全局，以便在 HTML 中调用
