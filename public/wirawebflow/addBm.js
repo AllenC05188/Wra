@@ -54,17 +54,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
     }
 
-    function addBm() {
+        function addBm() {
         const form = document.getElementById('addBmForm');
         const formData = new FormData(form);
         const jsonObject = {};
-
+    
         formData.forEach((value, key) => {
             jsonObject[key] = value;
         });
-
+    
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
+    
         fetch(form.action, {
             method: 'POST',
             headers: {
@@ -82,13 +82,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 document.getElementById('response').innerText = '子BM創建成功，ID: ' + data.body.ID;
             } else {
                 let errorMessage = '子BM創建失敗:\n';
-                for (const [key, value] of Object.entries(data.body.errors || {})) {
-                    errorMessage += `${key}: ${value.join(', ')}\n`;
-                }
                 if (data.body.error) {
                     errorMessage += `\nError: ${data.body.error}`;
                     if (data.body.details) {
-                        errorMessage += `\nDetails: ${data.body.details}`;
+                        errorMessage += `\nDetails: ${JSON.stringify(data.body.details)}`;
                     }
                 }
                 document.getElementById('response').innerText = errorMessage;
@@ -99,6 +96,7 @@ document.addEventListener("DOMContentLoaded", function() {
             console.error('錯誤:', error);
         });
     }
+
 
     window.getAccessToken = getAccessToken;  // 将 getAccessToken 函数暴露到全局，以便在 HTML 中调用
     window.addBm = addBm;  // 将 addBm 函数暴露到全局，以便在 HTML 中调用
